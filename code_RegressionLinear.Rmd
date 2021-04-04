@@ -1,0 +1,167 @@
+---
+title: "k-means"
+author: "restu dn"
+date: "4/5/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+
+```
+
+```{r}
+trainingSet = read.csv('../input/train.csv')
+
+```
+
+```{r}
+if(numberOfNA > 0) {
+  cat('Number of missing values found: ', numberOfNA)
+  cat('\nRemoving missing values...')
+  trainingSet = trainingSet[complete.cases(trainingSet), ]
+}
+
+```{r}
+par(mfrow = c(1, 2))
+
+boxplot(trainingSet$x, main='X', sub=paste('Outliers: ', boxplot.stats(trainingSet$x)$out))
+
+boxplot(trainingSet$y, main='Y', sub=paste('Outliers: ', boxplot.stats(trainingSet$y)$out))
+
+cor(trainingSet$x, trainingSet$y)
+
+regressor = lm(formula = y ~.,
+               data = trainingSet)
+
+```
+
+```{r}
+ggplot() +
+  geom_point(aes(x = trainingSet$x, y = trainingSet$y),
+             colour = 'red') +
+  geom_line(aes(x = trainingSet$x, y = predict(regressor, newdata = trainingSet)),
+            colour = 'blue') +
+  ggtitle('X vs Y (Training set)') +
+  xlab('X') +
+  ylab('Y')
+```
+
+```{r}
+testSet = read.csv('../input/test.csv')
+y_pred = predict(regressor, newdata = testSet)
+```
+
+```{r}
+ggplot() +
+  geom_point(aes(x = testSet$x, y = testSet$y),
+             colour = 'red') +
+  geom_line(aes(x = trainingSet$x, y = predict(regressor, newdata = trainingSet)),
+            colour = 'blue') +
+  ggtitle('X vs Y (Test set)') +
+  xlab('X') +
+  ylab('Y')
+```
+
+```{r}
+compare <- cbind (actual=testSet$x, y_pred)  # combine actual and predicted
+mean (apply(compare, 1, min)/apply(compare, 1, max))
+mean(0.9,0.9,0.9,0.9)
+```
+
+```{r}
+plot(trainingSet$y, resid(regressor), 
+     ylab="Residuals", xlab="Price", 
+     main="Residual plot") 
+mean(regressor$residuals)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+
+```
+
+```{r}
+trainingSet = read.csv('../input/train.csv')
+
+```
+
+```{r}
+if(numberOfNA > 0) {
+  cat('Number of missing values found: ', numberOfNA)
+  cat('\nRemoving missing values...')
+  trainingSet = trainingSet[complete.cases(trainingSet), ]
+}
+
+```{r}
+par(mfrow = c(1, 2))
+
+boxplot(trainingSet$x, main='X', sub=paste('Outliers: ', boxplot.stats(trainingSet$x)$out))
+
+boxplot(trainingSet$y, main='Y', sub=paste('Outliers: ', boxplot.stats(trainingSet$y)$out))
+
+cor(trainingSet$x, trainingSet$y)
+
+regressor = lm(formula = y ~.,
+               data = trainingSet)
+
+```
+
+```{r}
+ggplot() +
+  geom_point(aes(x = trainingSet$x, y = trainingSet$y),
+             colour = 'red') +
+  geom_line(aes(x = trainingSet$x, y = predict(regressor, newdata = trainingSet)),
+            colour = 'blue') +
+  ggtitle('X vs Y (Training set)') +
+  xlab('X') +
+  ylab('Y')
+```
+
+```{r}
+testSet = read.csv('../input/test.csv')
+y_pred = predict(regressor, newdata = testSet)
+```
+
+```{r}
+ggplot() +
+  geom_point(aes(x = testSet$x, y = testSet$y),
+             colour = 'red') +
+  geom_line(aes(x = trainingSet$x, y = predict(regressor, newdata = trainingSet)),
+            colour = 'blue') +
+  ggtitle('X vs Y (Test set)') +
+  xlab('X') +
+  ylab('Y')
+```
+
+```{r}
+compare <- cbind (actual=testSet$x, y_pred)  # combine actual and predicted
+mean (apply(compare, 1, min)/apply(compare, 1, max))
+mean(0.9,0.9,0.9,0.9)
+```
+
+```{r}
+plot(trainingSet$y, resid(regressor), 
+     ylab="Residuals", xlab="Price", 
+     main="Residual plot") 
+mean(regressor$residuals)
+```
+
+
+
+
+
+
+
+
+
+
+
